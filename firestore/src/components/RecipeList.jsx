@@ -1,4 +1,4 @@
-// components/ProductsList.js
+// components/recipesList.js
 import React, { useState, useEffect } from "react";
 import {
   collection,
@@ -22,58 +22,58 @@ import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
 
-const ProductsList = () => {
-  const [products, setProducts] = useState([]);
-  const [editingProductId, setEditingProductId] = useState(null);
+const RecipeList = () => {
+  const [recipes, setrecipes] = useState([]);
+  const [editingrecipeId, setEditingrecipeId] = useState(null);
   const [editName, setEditName] = useState("");
   const [editPrice, setEditPrice] = useState("");
 
   useEffect(() => {
-    const colRef = collection(db, "products");
+    const colRef = collection(db, "recipes");
     const unsubscribe = onSnapshot(colRef, (snapshot) => {
-      const productsData = snapshot.docs.map((doc) => ({
+      const recipesData = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
-      setProducts(productsData);
+      setrecipes(recipesData);
     });
 
     return () => unsubscribe();
   }, []);
 
-  const handleEdit = (product) => {
-    setEditingProductId(product.id);
-    setEditName(product.name);
-    setEditPrice(product.price);
+  const handleEdit = (recipe) => {
+    setEditingrecipeId(recipe.id);
+    setEditName(recipe.name);
+    setEditPrice(recipe.price);
   };
 
-  const handleSave = async (productId) => {
+  const handleSave = async (recipeId) => {
     try {
-      const productRef = doc(db, "products", productId);
-      await updateDoc(productRef, { name: editName, price: editPrice });
-      setEditingProductId(null);
+      const recipeRef = doc(db, "recipes", recipeId);
+      await updateDoc(recipeRef, { name: editName, price: editPrice });
+      setEditingrecipeId(null);
     } catch (err) {
-      console.error("Error updating product:", err);
+      console.error("Error updating recipe:", err);
     }
   };
 
   const handleCancel = () => {
-    setEditingProductId(null);
+    setEditingrecipeId(null);
   };
 
-  const handleDelete = async (productId) => {
+  const handleDelete = async (recipeId) => {
     try {
-      await deleteDoc(doc(db, "products", productId));
+      await deleteDoc(doc(db, "recipes", recipeId));
     } catch (err) {
-      console.error("Error deleting product:", err);
+      console.error("Error deleting recipe:", err);
     }
   };
 
   return (
     <List>
-      {products.map((product) => (
-        <ListItem key={product.id}>
-          {editingProductId === product.id ? (
+      {recipes.map((recipe) => (
+        <ListItem key={recipe.id}>
+          {editingrecipeId === recipe.id ? (
             <Box
               sx={{
                 display: "flex",
@@ -83,7 +83,7 @@ const ProductsList = () => {
               }}
             >
               <TextField
-                label="Product Name"
+                label="recipe Name"
                 value={editName}
                 onChange={(e) => setEditName(e.target.value)}
               />
@@ -92,7 +92,7 @@ const ProductsList = () => {
                 value={editPrice}
                 onChange={(e) => setEditPrice(e.target.value)}
               />
-              <IconButton onClick={() => handleSave(product.id)}>
+              <IconButton onClick={() => handleSave(recipe.id)}>
                 <SaveIcon />
               </IconButton>
               <IconButton onClick={handleCancel}>
@@ -102,13 +102,13 @@ const ProductsList = () => {
           ) : (
             <>
               <ListItemText
-                primary={product.name}
-                secondary={`Price: ${product.price}`}
+                primary={recipe.name}
+                secondary={`Price: ${recipe.price}`}
               />
-              <IconButton onClick={() => handleEdit(product)}>
+              <IconButton onClick={() => handleEdit(recipe)}>
                 <EditIcon />
               </IconButton>
-              <IconButton onClick={() => handleDelete(product.id)}>
+              <IconButton onClick={() => handleDelete(recipe.id)}>
                 <DeleteIcon />
               </IconButton>
             </>
@@ -119,4 +119,4 @@ const ProductsList = () => {
   );
 };
 
-export default ProductsList;
+export default RecipeList;

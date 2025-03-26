@@ -1,17 +1,17 @@
 // App.js
 import React from "react";
-import ProductsList from "./components/ProductsList";
-import AddProduct from "./components/AddProduct";
+import RecipeList from "./components/RecipeList";
+import AddRecipe from "./components/AddRecipe";
 import { Container, Typography } from "@mui/material";
 
 function App() {
   return (
     <Container>
       <Typography variant="h4" gutterBottom>
-        Firestore Demo: Products List
+        Firestore Demo: Recipes List
       </Typography>
-      <AddProduct />
-      <ProductsList />
+      <AddRecipe />
+      <RecipeList />
     </Container>
   );
 }
