@@ -1,4 +1,3 @@
-// components/Addrecipe.js
 import React, { useState } from "react";
 import { addDoc, collection } from "firebase/firestore";
 import { db, storage } from "../firebaseConfig";
@@ -6,29 +5,31 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { TextField, Button, Box } from "@mui/material";
 
 const AddRecipe = () => {
-  const [name, setName] = useState("");
-  const [price, setPrice] = useState("");
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
 
+  //Parte que se encarga del CREATE
   const handleAddrecipe = async (e) => {
     e.preventDefault();
     try {
       let imageUrl = "";
-      
+      //Si hay una imagen, se añade al storage y se guarda el link
       if (image) {
-        const imageRef = ref(storage, `recipes/${image.name}`);
+        const imageRef = ref(storage, `recipes/${image.title}`);
         await uploadBytes(imageRef, image);
         imageUrl = await getDownloadURL(imageRef);
       }
 
+      //Se agrega la informacion a la base de datos
       await addDoc(collection(db, "recipes"), { 
-        name, 
-        price: parseFloat(price), 
+        title, 
+        description: description, 
         imageUrl
       });
 
-      setName("");
-      setPrice("");
+      setTitle("");
+      setDescription("");
       setImage(null);
     } catch (err) {
       console.error("Error adding recipe: ", err);
@@ -42,15 +43,15 @@ const AddRecipe = () => {
       sx={{ display: "flex", gap: 2, mb: 2 }}
     >
       <TextField
-        label="recipe Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
+        label="recipe title"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
         required
       />
       <TextField
-        label="Price"
-        value={price}
-        onChange={(e) => setPrice(e.target.value)}
+        label="description"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
         required
       />
       <input
