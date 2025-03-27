@@ -1,4 +1,3 @@
-// App.js
 import React from "react";
 import RecipeList from "./components/RecipeList";
 import AddRecipe from "./components/AddRecipe";
@@ -8,7 +7,7 @@ function App() {
   return (
     <Container>
       <Typography variant="h4" gutterBottom>
-        Firestore Demo: Recipes List
+        Recipes List
       </Typography>
       <AddRecipe />
       <RecipeList />
